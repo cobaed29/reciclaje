@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA DE RECICLAJE - COBAED</title>
+    <style>
+        :root {
+            --cobaed-verde: #007a4d;
+            --cobaed-naranja: #f7941e;
+            --cobaed-gris: #a7a9ac;
+            --sombra: rgba(0,0,0,0.15);
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; padding: 15px;
+            background-color: #f4f7f4; 
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .header-container {
+            width: 100%; max-width: 1000px;
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 20px; border-bottom: 5px solid var(--cobaed-naranja);
+            padding-bottom: 15px; background: white; padding: 20px;
+            border-radius: 10px 10px 0 0; box-shadow: 0 4px 6px var(--sombra);
+            box-sizing: border-box;
+        }
+
+        .logo-escuela { width: 120px; }
+        .logo-escuela img { width: 120%; height: auto; }
+
+        .titulo-texto { text-align: right; }
+        h1 { color: var(--cobaed-verde); font-size: 2.2rem; margin: 0; text-transform: uppercase; }
+        .subtitulo { color: var(--cobaed-gris); font-size: 1.1rem; font-weight: bold; display: block; }
+        .fecha-actualizacion { color: #d32f2f; font-size: 0.9rem; font-weight: bold; margin-top: 5px; }
+
+        .controles { 
+            background: white; padding: 20px; border-radius: 0 0 10px 10px; 
+            box-shadow: 0 4px 10px var(--sombra); margin-bottom: 25px;
+            width: 100%; max-width: 1000px; border-top: 1px solid #eee;
+            text-align: center; box-sizing: border-box;
+        }
+
+        label { color: var(--cobaed-verde); font-weight: bold; margin-bottom: 10px; display: block; }
+        select { 
+            padding: 15px; font-size: 18px; border-radius: 8px; 
+            border: 2px solid var(--cobaed-verde); width: 100%; max-width: 500px;
+            cursor: pointer; outline: none;
+        }
+
+        table { width: 100%; max-width: 1000px; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px var(--sombra); }
+        thead { background-color: var(--cobaed-verde); color: white; }
+        th { padding: 18px; text-align: left; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+        td { padding: 14px 18px; border-bottom: 1px solid #eee; font-size: 1.05rem; color: #333; }
+
+        @media screen and (max-width: 650px) {
+            .header-container { flex-direction: column; text-align: center; }
+            .titulo-texto { text-align: center; margin-top: 15px; }
+            h1 { font-size: 1.8rem; }
+            thead { display: none; }
+            tr { display: block; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 10px; }
+            td { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; padding: 12px; }
+            td::before { content: attr(data-label); font-weight: bold; color: var(--cobaed-verde); font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="logo-escuela">
+            <img src="logo_coba.png" alt="Logo COBAED">
+        </div>
+        <div class="titulo-texto">
+            <h1>COBAED 29</h1>
+            <span class="subtitulo">Aporte de reciclaje</span>
+            <div class="fecha-actualizacion">Última actualización: 16 de Enero</div>
+        </div>
+    </div>
+
+    <div class="controles">
+        <label for="selectorGrupo">SELECCIONA GRUPO</label>
+        <select id="selectorGrupo" onchange="actualizarTabla()"></select>
+    </div>
+
+    <table id="tablaCooperacion">
+        <thead>
+            <tr>
+                <th>NOMBRE DEL ALUMNO</th>
+                <th>CANTIDAD ($)</th>
+                <th>ESTADO ACTUAL</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla"></tbody>
+    </table>
+
+<script>
+    const META_DINERO = 200; 
+    const ESCALA = [
+        { min: 100, color: "#e3f2fd", msg: "⭐ ¡META CUMPLIDA!" },       
+        { min: 67,  color: "#e8f5e9", msg: "✅ Ya mero" },           
+        { min: 34,  color: "#fffde7", msg: "⚠️ Avance significativo" },   
+        { min: 1,   color: "#fff3e0", msg: "⏳ Va empezando" },       
+        { min: 0,   color: "#ffebee", msg: "❌ Sin aportación" } 
+    ];
+
+    const grupos = {
+        "201": [
+            { nombre: "CAMACHO RIVERA DALIA", dinero: 200 },
+            { nombre: "DE LA CRUZ BARRIENTOS JESUS ALONSO", dinero: 190 },
+            { nombre: "FRIAS PEREZ ZAMARA GUADALUPE", dinero: 130 },
+            { nombre: "FUENTES RODRIGUEZ JOSE MARIA", dinero: 120 },
+            { nombre: "GALLEGOS GALLEGOS WENDY SYLEY", dinero: 68 },
+            { nombre: "HERNANDEZ  BRIANNA ABIGAIL", dinero: 67 },
+            { nombre: "MARTINEZ TERRONES ELVIRA YAMILET", dinero: 0 },
+            { nombre: "NUÑEZ MEZA ZAHID SEBASTIAN", dinero: 0 },
+            { nombre: "PADILLA VILLEGAS MAYTE", dinero: 0 },
+            { nombre: "PARRA REYES MARIO MIGUEL", dinero: 0 },
+            { nombre: "REYES ANGEL SOL DANELI", dinero: 0 },
+            { nombre: "RUIZ FRANCO JULIETA", dinero: 0 },
+            { nombre: "VALENZUELA MENDOZA NOEMI CAROLINA", dinero: 0 },
+            { nombre: "VALENZUELA RAMIREZ PAOLA GUADALUPE", dinero: 0 },
+            { nombre: "VALENZUELA VALENZUELA ANA MARIA", dinero: 0 },
+            { nombre: "VARGAS RETANA JOSUE ANTONIO", dinero: 0 },
+            { nombre: "VELASQUEZ GARCIA MARIA ISLENI", dinero: 0 }
+        ],
+        "202": [
+            { nombre: "ADAME NUÑEZ EDUARDO IVAN", dinero: 0 },
+            { nombre: "BARRAZA SANABRIA UBALDO DE JESUS", dinero: 0 },
+            { nombre: "CASTRO QUIÑONES PABLO ADRIAN", dinero: 0 },
+            { nombre: "CORONADO MARROQUIN DAISY ARACELY", dinero: 0 },
+            { nombre: "DIAZ HERRERA JOSUE FERNANDO", dinero: 0 },
+            { nombre: "DURON FERNANDEZ ETHAN NOE", dinero: 0 },
+            { nombre: "FAVELA MARROQUIN VIANEY JAQUELINE", dinero: 0 },
+            { nombre: "LOPEZ AYALA EFREN JOEL", dinero: 0 },
+            { nombre: "MADERA REYES JOSE ARMANDO", dinero: 0 },
+            { nombre: "OBREGON GONZALEZ MIGUEL ANGEL", dinero: 0 },
+            { nombre: "OLGUIN CORRAL ALEXIS ARTURO", dinero: 0 },
+            { nombre: "OROZCO PAYAN RASHID ISAAC", dinero: 0 },
+            { nombre: "ORTEGA NEVAREZ SANTIAGO", dinero: 0 },
+            { nombre: "PAYAN NAVARRETE OSVALDO ZAMIR", dinero: 0 },
+            { nombre: "QUEVEDO MARIN FERNANDO", dinero: 0 },
+            { nombre: "REYES QUEZADA DIEGO", dinero: 0 },
+            { nombre: "RIOPEDRE MARQUEZ IRVING IVAN", dinero: 0 },
+            { nombre: "RODRIGUEZ CABALLERO JONATHAN FRANCISCO", dinero: 0 },
+            { nombre: "RODRIGUEZ MORENO JENNIFER MICHELL", dinero: 0 },
+            { nombre: "ROSAS MORALES HAZIEL", dinero: 0 },
+            { nombre: "RUIZ ARREOLA PEDRO", dinero: 0 },
+            { nombre: "SANTOS GUTIERREZ OSCAR ALEJANDRO", dinero: 0 },
+            { nombre: "VELAZQUEZ SANCHEZ PAUL ESAU", dinero: 0 }
+        ],
+        "203": [
+            { nombre: "CANO GAMBOA BRISA ELIZABETH", dinero: 0 },
+            { nombre: "DE LA ROSA NAVA OLIVER JOAN", dinero: 0 },
+            { nombre: "ESPINOZA PRENDIZ LUZ ARIANA", dinero: 0 },
+            { nombre: "ESTRADA GALVAN WILLIAM LEONARDO", dinero: 0 },
+            { nombre: "FLORES PARRA ARLETTE", dinero: 0 },
+            { nombre: "FRAILE MARTINEZ JESUS EMANUEL", dinero: 0 },
+            { nombre: "GARCIA AVILEZ MARIA FERNANDA", dinero: 0 },
+            { nombre: "GARCIA SALAZAR MARIA YETZALI", dinero: 0 },
+            { nombre: "GARCIA SALAZAR MAYLE LUCIA", dinero: 0 },
+            { nombre: "GRACIANO QUEZADA IVANA", dinero: 0 },
+            { nombre: "GURROLA PEÑA JEREMY HALIM", dinero: 0 },
+            { nombre: "PIZARRO VILLA IMANOL", dinero: 0 },
+            { nombre: "QUEBEDO VALDEZ ISAMAR", dinero: 0 },
+            { nombre: "QUEZADA GARAY JENNYFER ALINA", dinero: 0 },
+            { nombre: "RECIO DOMINGUEZ ALDO", dinero: 0 },
+            { nombre: "RENTERIA GARCIA FELIPE DE JESUS", dinero: 0 },
+            { nombre: "ROSAS CARBAJAL ISABELLA MADAI", dinero: 0 },
+            { nombre: "SOTO MARTINEZ LIZBETH", dinero: 0 },
+            { nombre: "TINOCO QUIÑONES CESAR RISS", dinero: 0 },
+            { nombre: "VALENZUELA PIZAÑA ANGEL DAVID", dinero: 0 },
+            { nombre: "VAZQUEZ PIZARRO ITALY TAMARA", dinero: 0 }
+        ],
+        "204": [
+            { nombre: "AVILA BARRAZA ANGEL", dinero: 0 },
+            { nombre: "CORRAL ARELLANO ALEXIS GIOVANNI", dinero: 0 },
+            { nombre: "CHAVEZ MORONES NEFTALI JANET", dinero: 0 },
+            { nombre: "ENRIQUEZ MARTINEZ MARIANA LIZETH", dinero: 0 },
+            { nombre: "GRACIANO ANGELES JAQUELINE GUADALUPE", dinero: 0 },
+            { nombre: "GRAJEDA VALDEZ SARETH ABIGAIL", dinero: 0 },
+            { nombre: "HERNANDEZ OBREGON MAGALY ABIGAIL", dinero: 0 },
+            { nombre: "HUERTA SANCHEZ BRISA DENISSE", dinero: 0 },
+            { nombre: "LOPEZ FRANCO ELEAZAR", dinero: 0 },
+            { nombre: "LOPEZ HERNANDEZ RAYDEN", dinero: 0 },
+            { nombre: "MARTINEZ ONTIVEROS JORDY ESAU", dinero: 0 },
+            { nombre: "NEVAREZ PUGA STEISY NAHOMI", dinero: 0 },
+            { nombre: "ORTIZ GUAJARDO OMALI NOHEMI", dinero: 0 },
+            { nombre: "REYES BARRAZA OSCAR ALONSO", dinero: 0 },
+            { nombre: "REYES ORTIZ JOSELYN ARELY", dinero: 0 },
+            { nombre: "REYES ROSA JOSE ISAAC", dinero: 0 },
+            { nombre: "REYES VALENZUELA AILEEN SIOMARA", dinero: 0 },
+            { nombre: "RIVERA ALDAY JONATHAN AUSENCIO", dinero: 0 },
+            { nombre: "RIVERA MARTINEZ KIMBERLY GUADALUPE", dinero: 0 },
+            { nombre: "RUVALCABA NAVARRETE GIOVANNA IVONNE", dinero: 0 },
+            { nombre: "VALENZUELA REYES PEDRO JAVIER", dinero: 0 },
+            { nombre: "VILLA RETANA ABRAHAM USIEL", dinero: 0 }
+        ],
+        "205": [
+            { nombre: "ALVARADO ROJAS ANGEL ISAIAS", dinero: 0 },
+            { nombre: "ALVAREZ  JOSE DE JESUS", dinero: 0 },
+            { nombre: "AMAYA GARCIA PAOLA MICHELTH", dinero: 0 },
+            { nombre: "AVILA DUARTE SEBASTIAN FERNANDO", dinero: 0 },
+            { nombre: "CABALLERO CHAIREZ PAMELA", dinero: 0 },
+            { nombre: "FALCON QUEZADA ANGEL LEON", dinero: 0 },
+            { nombre: "GONZALEZ ROJAS RENATA", dinero: 0 },
+            { nombre: "HERRERA MARTINEZ LUIS ENRIQUE", dinero: 0 },
+            { nombre: "HUERTA AVILA GEOVANY EMMANUEL", dinero: 0 },
+            { nombre: "LERMA SANDOBAL ELVIRA NATTALIA", dinero: 0 },
+            { nombre: "LUNA RIVAS ALEXIS SEBASTIAN", dinero: 0 },
+            { nombre: "MAR PAYAN DULCE MAYELA", dinero: 0 },
+            { nombre: "MONTES REYES JADE YISUI", dinero: 0 },
+            { nombre: "MORALES MEDRANO ABRAHAM", dinero: 0 },
+            { nombre: "MORALES REYES REGINA", dinero: 0 },
+            { nombre: "MUÑOZ IRIGOYEN JESUS", dinero: 0 },
+            { nombre: "ONTIVEROS ARRATIA YOCZAN ALEXANDER", dinero: 0 },
+            { nombre: "OROZCO REYES CAMILA YAHAIRA", dinero: 0 },
+            { nombre: "QUEZADA MEZA ANAMAR", dinero: 0 },
+            { nombre: "REYES SORIA DAYANA ALEJANDRA", dinero: 0 },
+            { nombre: "ROJAS CASTRO GARDENIA", dinero: 0 }
+        ],
+        "401": [
+            { nombre: "AVITIA RAMIREZ AZUL DANAE", dinero: 0 },
+            { nombre: "CARBAJAL SANCHEZ JOEL ANTONIO", dinero: 0 },
+            { nombre: "DOMINGUEZ ONTIVEROS WILLIAM GUADALUPE", dinero: 0 },
+            { nombre: "GARCIA HERNANDEZ JACYD MAYLENE", dinero: 0 },
+            { nombre: "GOMEZ FRANCO LUIS ANGEL", dinero: 0 },
+            { nombre: "HERNANDEZ DEL TORO IRMA GUADALUPE", dinero: 0 },
+            { nombre: "HERNANDEZ MARTINEZ JESUS JAVIER", dinero: 0 },
+            { nombre: "HERRERA MARTINEZ AYLIN ARELY", dinero: 0 },
+            { nombre: "HUERTA MARTINEZ CAROLINA ESPERANZA", dinero: 0 },
+            { nombre: "IBARRA CALLEROS EVELYN GUADALUPE", dinero: 0 },
+            { nombre: "IRIGOYEN QUIÑONES BRANDON", dinero: 0 },
+            { nombre: "LOPEZ ORTIZ ALAN JESUS", dinero: 0 },
+            { nombre: "NIEVES ESCOBEDO XIMENA AIDE", dinero: 0 },
+            { nombre: "NUÑEZ AYALA ABEL EDUARDO", dinero: 0 },
+            { nombre: "NUÑEZ ZUÑIGA JESUS ALBERTO", dinero: 0 },
+            { nombre: "PEREZ IBARRA ISIDRO DAVID", dinero: 0 },
+            { nombre: "QUIÑONES ALMODOVAR ERICK JESSUI", dinero: 0 },
+            { nombre: "QUIÑONEZ CASTRO JUAN JACIEL", dinero: 0 },
+            { nombre: "RAMIREZ ORTIZ JAIRO YOSEP", dinero: 0 },
+            { nombre: "RAMIREZ RODRIGUEZ HECTOR MANUEL", dinero: 0 },
+            { nombre: "RODRIGUEZ RAMIREZ OSCAR GAEL", dinero: 0 },
+            { nombre: "SIDA MALDONADO JOSE MARIA", dinero: 0 },
+            { nombre: "VALLES NORIEGA ZLATAN KARIM", dinero: 0 },
+            { nombre: "VASQUEZ SOTO VALENTIN", dinero: 0 },
+            { nombre: "VILLALOBOS ORTIZ ERNESTO FROILAN", dinero: 0 }
+        ],
+        "402": [
+            { nombre: "ALVAREZ VALENZUELA AYLIN VALERIA", dinero: 0 },
+            { nombre: "ANGULO MONARREZ ALEXIS", dinero: 0 },
+            { nombre: "ARAMBULA BRISEÑO ANGEL MANUEL", dinero: 0 },
+            { nombre: "BENITEZ GALARZA ANGEL DAVID", dinero: 0 },
+            { nombre: "CABALLERO RODRIGUEZ KARLA LIBERTAD", dinero: 0 },
+            { nombre: "CALDERA DE SANTIAGO CAROLINA", dinero: 0 },
+            { nombre: "CAMPOS UNZUETA ALDO RAMON", dinero: 0 },
+            { nombre: "FAVELA MARROQUIN IDALY MARLENE", dinero: 0 },
+            { nombre: "FRANCO MIJARES PAULA", dinero: 0 },
+            { nombre: "GARCIA FRANCO VALERIA", dinero: 0 },
+            { nombre: "HERNANDEZ SOTO BRISSA", dinero: 0 },
+            { nombre: "ORTIZ ALAMOS JOHAN JAVIER", dinero: 0 },
+            { nombre: "ORTIZ JUAREZ ANA ELIDIA", dinero: 0 },
+            { nombre: "PARRA BARRAZA ARMANDO", dinero: 0 },
+            { nombre: "QUINTANA RODRIGUEZ EDEN", dinero: 0 },
+            { nombre: "REYES HERRERA JULIO CESAR", dinero: 0 },
+            { nombre: "RIOPEDRE MARQUEZ GEORGIA ROMINA", dinero: 0 },
+            { nombre: "RIVERA HERRERA MARTIN GUADALUPE", dinero: 0 },
+            { nombre: "ROJAS MARQUEZ WALTER ALEXIS", dinero: 0 },
+            { nombre: "RUIZ GURROLA DANIEL", dinero: 0 },
+            { nombre: "SANTOS AVITIA JOSE GAEL", dinero: 0 },
+            { nombre: "SIDA RUVALCABA JARED JOSUE", dinero: 0 },
+            { nombre: "SOTO DOMINGUEZ GUILLERMO", dinero: 0 },
+            { nombre: "VALENZUELA VASQUEZ JESUS ALEJANDRO", dinero: 0 }
+        ],
+        "403": [
+            { nombre: "ACOSTA HERNANDEZ DIEGO JEHOVANY", dinero: 0 },
+            { nombre: "ALVAREZ REYES LEONARDO", dinero: 0 },
+            { nombre: "AVILA BERMUDEZ DAFNE ALEJANDRA", dinero: 0 },
+            { nombre: "AYALA GONZALEZ KRITZIA LILY", dinero: 0 },
+            { nombre: "CASTRO ROCHA SANTIAGO OSCAR", dinero: 0 },
+            { nombre: "CHAVEZ REYES ORLANDO ALBERTO", dinero: 0 },
+            { nombre: "DIAZ HUERTA MARIA FERNANDA", dinero: 0 },
+            { nombre: "GALINDO FRANCO JUAN MANUEL", dinero: 0 },
+            { nombre: "GALINDO NORIEGA MICAELA GUADALUPE", dinero: 0 },
+            { nombre: "GALVAN RETANA MISAEL", dinero: 0 },
+            { nombre: "GALLEGOS RUIZ GERARDO YAHIR", dinero: 0 },
+            { nombre: "GARAY VALENZUELA KIMBERLY GUADALUPE", dinero: 0 },
+            { nombre: "GARCIA LUNA MANUEL ERNESTO", dinero: 0 },
+            { nombre: "GONZALEZ DIAZ KEIRA ABRIL", dinero: 0 },
+            { nombre: "GURROLA ANTUNA CESAR ISAAC", dinero: 0 },
+            { nombre: "GURROLA ANTUNA JULIO ISMAEL", dinero: 0 },
+            { nombre: "HERRERA REYES EDWIN", dinero: 0 },
+            { nombre: "MORALES CANAAN JAVIER", dinero: 0 },
+            { nombre: "PIÑA ARCINIEGA ALLISSON RENATA", dinero: 0 },
+            { nombre: "REYES ESTRADA GENESIS YOMARA", dinero: 0 },
+            { nombre: "RIVAS ALVARADO ULISES ALONSO", dinero: 0 },
+            { nombre: "RIVAS VELAZQUEZ GERARDO ISAAC", dinero: 0 },
+            { nombre: "RODRIGUEZ CARRAZCO MIRIAM", dinero: 0 },
+            { nombre: "SANTOS HERRERA JIMENA", dinero: 0 },
+            { nombre: "TERRAZAS ACOSTA HANNA YISEL", dinero: 0 },
+            { nombre: "VALENZUELA MENDOZA MAYTE VIRIDIANA", dinero: 0 },
+            { nombre: "ZEGER VASQUEZ Y AREVALO DEMIAN YUSEI", dinero: 0 }
+        ],
+        "404": [
+            { nombre: "ALAMILLO INSURRIAGA JUAN AGUSTIN", dinero: 0 },
+            { nombre: "ALDABA QUEZADA SERGIO ALEJANDRO", dinero: 0 },
+            { nombre: "ARELLANO SANTILLAN SARA", dinero: 0 },
+            { nombre: "AYALA ARREOLA JOSUE MANUEL", dinero: 0 },
+            { nombre: "CHAVEZ QUINTERO BELEN GUADALUPE", dinero: 0 },
+            { nombre: "DIAZ ACOSTA ANGELA BENNET", dinero: 0 },
+            { nombre: "DIAZ GARCIA VALENTINA", dinero: 0 },
+            { nombre: "DIAZ NIEVES DANIELA ANAHI", dinero: 0 },
+            { nombre: "FRANCO QUIÑONES MIGUEL ALONSO", dinero: 0 },
+            { nombre: "FUENTES GONZALEZ DULCE MARIA", dinero: 0 },
+            { nombre: "GALINDO CRUZ PAOLA MATZIEL", dinero: 0 },
+            { nombre: "GALLEGOS GARCIA JULIA", dinero: 0 },
+            { nombre: "GARCIA DIAZ ESTRELLA", dinero: 0 },
+            { nombre: "GONZALEZ SOTO SOFIA JOSELYN", dinero: 0 },
+            { nombre: "MORALES DIAZ CAMILA", dinero: 0 },
+            { nombre: "NIEVES GARCIA JOSE MANUEL", dinero: 0 },
+            { nombre: "OBREGON GURROLA KITZIA PALOMA", dinero: 0 },
+            { nombre: "ORONA CAMPOS XIMENA", dinero: 0 },
+            { nombre: "PEREZ SANDOVAL MIGUEL ANGEL", dinero: 0 },
+            { nombre: "QUIÑONES CONTRERAS YERALDINNE  ALICIA", dinero: 0 },
+            { nombre: "RAMOS CALDERA ROMAN JAIR", dinero: 0 },
+            { nombre: "REYES FERNANDEZ DANITZIA GUADALUPE", dinero: 0 },
+            { nombre: "REYES GONZALEZ BRAYAN EDUARDO", dinero: 0 },
+            { nombre: "REYES IRIGOYEN PALOMA YAMILE", dinero: 0 },
+            { nombre: "ROJAS RIVERA XIMENA", dinero: 0 },
+            { nombre: "ROMERO HERNANDEZ JOHANA RUBI", dinero: 0 },
+            { nombre: "SANCHEZ SOTO SAHAMANTHA SUSSEY", dinero: 0 },
+            { nombre: "SANDOVAL CAMPOS EMELY GUADALUPE", dinero: 0 },
+            { nombre: "SIDA DOMINGUEZ LILIANA", dinero: 0 },
+            { nombre: "VELAZQUEZ GUTIERREZ VICTORIA", dinero: 0 },
+            { nombre: "VILLARREAL HERRERA BRIANA", dinero: 0 },
+            { nombre: "VILLASEÑOR MENDOZA TANYA GUADALUPE", dinero: 0 }
+        ],
+        "405": [
+            { nombre: "AGUIRRE AVILA ANGEL HASSAN", dinero: 0 },
+            { nombre: "ANDRADE NEVAREZ ANTONIO ITAMAR", dinero: 0 },
+            { nombre: "ARELLANO SANTILLAN DIANA", dinero: 0 },
+            { nombre: "ARGUMEDO GARCIA EVELYN", dinero: 0 },
+            { nombre: "BLANCO NEVAREZ ORLANDO", dinero: 0 },
+            { nombre: "CIGARROA ORTIZ ANGELICA", dinero: 0 },
+            { nombre: "CONTRERAS CHAIREZ JUAN PEDRO", dinero: 0 },
+            { nombre: "CONTRERAS SARIÑANA LUIS MANUEL", dinero: 0 },
+            { nombre: "ESPARZA ARREZ JOSE EDUARDO", dinero: 0 },
+            { nombre: "FAVELA PEREDA CRISS ANGEL", dinero: 0 },
+            { nombre: "FLORES CEBALLOS RODRIGO", dinero: 0 },
+            { nombre: "GARCIA MORALES EFREN FERNANDO", dinero: 0 },
+            { nombre: "GARCIA RAMOS ELIAN YAEL", dinero: 0 },
+            { nombre: "GUERRERO ARANGO NAHOMI ABIZAI", dinero: 0 },
+            { nombre: "LARA GONZALEZ ALISSON DANAE", dinero: 0 },
+            { nombre: "NUÑEZ GARCIA EDITH", dinero: 0 },
+            { nombre: "ONTIVEROS CHAVEZ KAMILA", dinero: 0 },
+            { nombre: "ORTIZ BURCIAGA JOSE ANGEL", dinero: 0 },
+            { nombre: "PAEZ ALVAREZ ESMERALDA JOSELINE", dinero: 0 },
+            { nombre: "PEREZ ORTIZ LUZ ARELI", dinero: 0 },
+            { nombre: "QUIROGA MARTINEZ GAEL", dinero: 0 },
+            { nombre: "RAMIREZ PONCE EDGAR TADEO", dinero: 0 },
+            { nombre: "REYES CASTAÑEDA XIMENA", dinero: 0 },
+            { nombre: "RODRIGUEZ PIZARRO KEVIN ADRIAN", dinero: 0 },
+            { nombre: "SIFUENTES MORALES WILLIAM ISAAC", dinero: 0 }
+        ],
+        "406": [
+            { nombre: "ALVARADO FUENTES HELEN MARINA", dinero: 0 },
+            { nombre: "BERNAL SARIÑANA GUILLERMO ANTONIO", dinero: 0 },
+            { nombre: "CAMPOS GARCIA MARIA JOSE", dinero: 0 },
+            { nombre: "COLIN SARABIA XANA KAMILA", dinero: 0 },
+            { nombre: "CORRAL DURON KETZALY ESTRELLA", dinero: 0 },
+            { nombre: "CHAVARRIA ROJAS DANIELA GUADALUPE", dinero: 0 },
+            { nombre: "CHAVEZ DIAZ DIEGO ANGEL", dinero: 0 },
+            { nombre: "DEL TORO FAVELA LOVELY ENID", dinero: 0 },
+            { nombre: "DIAZ VARGAS XIMENA SOCORRO", dinero: 0 },
+            { nombre: "GRACIANO ENRIQUEZ LILIANA NOHEMI", dinero: 0 },
+            { nombre: "LUNA GRAJEDA ELIUD ASHAEL", dinero: 0 },
+            { nombre: "LUNA TORRES ANDREA SUGEY", dinero: 0 },
+            { nombre: "MARTINEZ RIVERA ELIZABETH", dinero: 0 },
+            { nombre: "MORALES VALENCIANA ALYSON GUADALUPE", dinero: 0 },
+            { nombre: "MORALES VARGAS JIMENA", dinero: 0 },
+            { nombre: "PARRA SEGOVIA KASSANDRA", dinero: 0 },
+            { nombre: "PEREZ ROSAS MARIO ALBERTO", dinero: 0 },
+            { nombre: "PIZAÑA FRANCO KEVIN EDUARDO", dinero: 0 },
+            { nombre: "PIZARRO ACOSTA NEIDA GUADALUPE", dinero: 0 },
+            { nombre: "RENTERIA PEREZ ESTRELLA GUADALUPE", dinero: 0 },
+            { nombre: "REYES RODRIGUEZ KETZUVY YARELY", dinero: 0 },
+            { nombre: "REYES SANCHEZ ANAHI", dinero: 0 },
+            { nombre: "RODRIGUEZ GALLEGOS INGRID DENISE", dinero: 0 },
+            { nombre: "RODRIGUEZ GURROLA FERNANDA SARAHI", dinero: 0 },
+            { nombre: "SANDOYA BARRON CAMILA ARALY", dinero: 0 },
+            { nombre: "SARIÑANA PINEDO KAROL XIMENA", dinero: 0 },
+            { nombre: "TERRAZAS  ANA GUADALUPE", dinero: 0 },
+            { nombre: "VALADEZ HERNANDEZ WILLIAM ALEJANDRO", dinero: 0 },
+            { nombre: "VALENZUELA HUERTA CAMILA", dinero: 0 }
+        ],
+        "601": [
+            { nombre: "BARRAZA PINEDA ANABEL", dinero: 0 },
+            { nombre: "CAMPOS QUIROGA CITLALY", dinero: 0 },
+            { nombre: "CERVANTES CALLEROS JOSE", dinero: 0 },
+            { nombre: "DIAZ ORTIZ GABRIEL EDUARDO", dinero: 0 },
+            { nombre: "FERNANDEZ ARJON ABEL ZAID", dinero: 0 },
+            { nombre: "GALLEGOS ANGELES BRAYAN OZIEL", dinero: 0 },
+            { nombre: "GALLEGOS ARRES ALEXA YAMILE", dinero: 0 },
+            { nombre: "GARCIA RAMOS JOSE LUIS", dinero: 0 },
+            { nombre: "GONZALEZ MONTOYA OMAR", dinero: 0 },
+            { nombre: "GUEVARA AYALA MATEO", dinero: 0 },
+            { nombre: "HUERTA PADILLA SILVIA CRISTAL", dinero: 0 },
+            { nombre: "JIMENEZ LOZOYA GLEN", dinero: 0 },
+            { nombre: "LAZCANO LARA OMAR", dinero: 0 },
+            { nombre: "LOBATOS AVALOS JASSIEL ARMANDO", dinero: 0 },
+            { nombre: "LUNA RIVAS CARLOS ERICK", dinero: 0 },
+            { nombre: "MARTINEZ LUNA JESUS", dinero: 0 },
+            { nombre: "NUÑEZ SOTO OLIVER LEONARDO", dinero: 0 },
+            { nombre: "OROZCO REYES OMAR EDUARDO", dinero: 0 },
+            { nombre: "PARADA DEVORA EMANUEL", dinero: 0 },
+            { nombre: "QUEZADA GONZALEZ JONATHAN", dinero: 0 },
+            { nombre: "RAMIREZ HOLGUIN LUIS REY", dinero: 0 },
+            { nombre: "ROJAS VARGAS IVAN", dinero: 0 },
+            { nombre: "RUIZ DELGADO ZAHID IVAN", dinero: 0 },
+            { nombre: "RUTIAGA PIEDRA DANIEL", dinero: 0 },
+            { nombre: "SARMIENTO JAQUEZ KEVIN RICARDO", dinero: 0 },
+            { nombre: "VAZQUEZ RESENDIZ MANUEL DE JESUS", dinero: 0 }
+        ],
+        "602": [
+            { nombre: "ARREOLA DEVORA VALERIA GUADALUPE", dinero: 0 },
+            { nombre: "AVITIA RAMIREZ DANIA FRANCELL", dinero: 0 },
+            { nombre: "CAMPOS UNZUETA SEBASTIAN", dinero: 0 },
+            { nombre: "CASTAÑEDA QUEZADA LUIS FERNANDO", dinero: 0 },
+            { nombre: "CONTRERAS GARCIA SOFIA SARAHI", dinero: 0 },
+            { nombre: "DEVORA SIFUENTES RICARDO", dinero: 0 },
+            { nombre: "DURON ROJO LUIS ANTONIO", dinero: 0 },
+            { nombre: "FELIX REYES JOSHUA", dinero: 0 },
+            { nombre: "GALARZA DOMINGUEZ OMAR JASSIEL", dinero: 0 },
+            { nombre: "GUTIERREZ  EMMANUEL", dinero: 0 },
+            { nombre: "MACIAS MORALES KEVIN ALEJANDRO", dinero: 0 },
+            { nombre: "MEDRANO LOPEZ LIZANDRO GUADALUPE", dinero: 0 },
+            { nombre: "MONTANTES HUERTA PABLO JONATHAN", dinero: 0 },
+            { nombre: "MORALES VAZQUEZ BRISA ANAHI", dinero: 0 },
+            { nombre: "PIZAÑA OLGUIN EDWIN", dinero: 0 },
+            { nombre: "REYES ESCOBEDO EMILY JOSELINE", dinero: 0 },
+            { nombre: "REYES ORTIZ ANGEL ARMANDO", dinero: 0 },
+            { nombre: "REYES ORTIZ LIZETH GUADALUPE", dinero: 0 },
+            { nombre: "RODRIGUEZ GURROLA GENESIS ELIZABETH", dinero: 0 },
+            { nombre: "RUIZ REYES ARANZA GUADALUPE", dinero: 0 },
+            { nombre: "SOTO JUAREZ DANNA EMILIA", dinero: 0 },
+            { nombre: "UNZUETA CELIS BRITHANY MAIRYN", dinero: 0 },
+            { nombre: "VALENZUELA BENITEZ JOSE MANUEL", dinero: 0 },
+            { nombre: "VALENZUELA PIZAÑA DAIRA ELIZABETH", dinero: 0 },
+            { nombre: "VELAZQUEZ REYES JAIME YOSDIEL", dinero: 0 }
+        ],
+        "603": [
+            { nombre: "ARRATIA ARENAS DENNIS AMARELY", dinero: 0 },
+            { nombre: "BARRAZA HERRERA YAILIN", dinero: 0 },
+            { nombre: "CARRETERO OBREGON NICOLAS", dinero: 0 },
+            { nombre: "CASTAÑEDA CABRALES SERGIO EMILIANO", dinero: 0 },
+            { nombre: "DIAZ RENTERIA JESUS", dinero: 0 },
+            { nombre: "GALLEGOS DIAZ EMMANUEL", dinero: 0 },
+            { nombre: "GALLEGOS MARTINEZ OSIERI NAHUM", dinero: 0 },
+            { nombre: "HERRERA GARCIA GERARDO VENTURA", dinero: 0 },
+            { nombre: "LANDEROS ROBLEDO EDWIN", dinero: 0 },
+            { nombre: "MARTINEZ HERRERA BRANDON DAVID", dinero: 0 },
+            { nombre: "MONCAYO CAMPOS KIMBERLY  VALERIA", dinero: 0 },
+            { nombre: "MORENO GARAY YESICA", dinero: 0 },
+            { nombre: "PEREZ HURTADO SEBASTIAN", dinero: 0 },
+            { nombre: "QUEZADA REYES AXEL", dinero: 0 },
+            { nombre: "QUIÑONES ROSAS ERIK JASSIEL", dinero: 0 },
+            { nombre: "REYES ORTEGA LUIS KEVIN", dinero: 0 },
+            { nombre: "REYES REYES MIGUEL ANGEL", dinero: 0 },
+            { nombre: "RIOS CAMPOS RUTH", dinero: 0 },
+            { nombre: "RODRIGUEZ SANTILLAN EIDAN EMMANUEL", dinero: 0 },
+            { nombre: "ROSALES CHAVEZ JOSE ANTONIO", dinero: 0 },
+            { nombre: "SOTO RIOS MANUEL DIDIER", dinero: 0 },
+            { nombre: "VARELA MARTINEZ JUAN ANTONIO", dinero: 0 },
+            { nombre: "VELAZQUEZ SANTILLAN KARLA ARELY", dinero: 0 }
+        ],
+        "604": [
+            { nombre: "ALDABA CUMPLIDO YADIRA VIANEY", dinero: 0 },
+            { nombre: "ARELLANO RIVERA IVAN", dinero: 0 },
+            { nombre: "DIAZ RIVERA JAQUELINE GUADALUPE", dinero: 0 },
+            { nombre: "DIAZ VALENZUELA SEBASTIAN ALEJANDRO", dinero: 0 },
+            { nombre: "GARCIA GALINDO ALINA JOCELYN", dinero: 0 },
+            { nombre: "GARCIA REYES VANESA GUADALUPE", dinero: 0 },
+            { nombre: "GARCIA SANCHEZ VALERIA", dinero: 0 },
+            { nombre: "GONZALEZ CASTRO IVAN JAVIER", dinero: 0 },
+            { nombre: "GURROLA PIZAÑA DANIELA NAHID", dinero: 0 },
+            { nombre: "GURROLA REYES MAYUMI GUADALUPE", dinero: 0 },
+            { nombre: "HERNANDEZ HERNANDEZ SARAI", dinero: 0 },
+            { nombre: "HERRERA GONZALEZ FERNANDA STEPHANIA", dinero: 0 },
+            { nombre: "HUERTA ROSALES JESUS ABRAHAM", dinero: 0 },
+            { nombre: "LOPEZ FRANCO CINTHIA FERNANDA", dinero: 0 },
+            { nombre: "LUNA GOMEZ KAREN IXCHEL", dinero: 0 },
+            { nombre: "NEVAREZ GONZALEZ YELERY ADAVID", dinero: 0 },
+            { nombre: "QUEZADA MORALES MELANIE LIZBETH", dinero: 0 },
+            { nombre: "RAMIREZ NIEVES ESTANISLADO", dinero: 0 },
+            { nombre: "RESENDIZ ARENAS ZAID IVAN", dinero: 0 },
+            { nombre: "RODRIGUEZ ALDAY CITLALY GUADALUPE", dinero: 0 },
+            { nombre: "RODRIGUEZ GALLEGOS JULISA JACQUELINE", dinero: 0 },
+            { nombre: "SOTO FIERRO JESUS DAVID", dinero: 0 },
+            { nombre: "SOTO MORALES MARIA VALERIA", dinero: 0 },
+            { nombre: "VARELAS RIVAS ESTRELLA JOELLY", dinero: 0 },
+            { nombre: "VARGAS AGUILAR DAYREN YAMILETH", dinero: 0 }
+        ],
+        "605": [
+            { nombre: "AYALA ARREOLA XIMENA MONSERRATH", dinero: 0 },
+            { nombre: "BENITEZ RIVAS BETZY MARISOL", dinero: 0 },
+            { nombre: "CHAVEZ BARRERA BRISA VALERIA", dinero: 0 },
+            { nombre: "DOMINGUEZ ORTIZ AZUL AZENETH", dinero: 0 },
+            { nombre: "GARCIA DELGADO JIMENA ELIZABETH", dinero: 0 },
+            { nombre: "GRACIANO ENRIQUEZ MARIANA JUDITH", dinero: 0 },
+            { nombre: "IRIGOYEN BELTRAN MERCEDES", dinero: 0 },
+            { nombre: "LUNA GRACIANO MARIA DE JESUS", dinero: 0 },
+            { nombre: "LUNA QUEZADA CAMILA", dinero: 0 },
+            { nombre: "MARTINEZ VALENZUELA KEVIN JETSAU", dinero: 0 },
+            { nombre: "MENDOZA QUIÑONES MAGNOLIA ESTEFANIA", dinero: 0 },
+            { nombre: "NUÑEZ ZUÑIGA ESTRELLA NALLY", dinero: 0 },
+            { nombre: "ORTEGA GUAJARDO MARIBEL", dinero: 0 },
+            { nombre: "PINAL REYES ANA MARIA", dinero: 0 },
+            { nombre: "PUENTES GARCIA SONIA EDITH", dinero: 0 },
+            { nombre: "RESENDIZ INSURRIAGA DANIELA", dinero: 0 },
+            { nombre: "REYES VALENZUELA VALERIA CAROLINA", dinero: 0 },
+            { nombre: "RODRIGUEZ GURROLA JESUS ADAN", dinero: 0 },
+            { nombre: "ROMERO ARELLANO MILAGROS GUADALUPE", dinero: 0 },
+            { nombre: "ROSA MORALES BRITTANY", dinero: 0 },
+            { nombre: "TINOCO QUIÑONES KIMBERLY GUADALUPE", dinero: 0 },
+            { nombre: "VALDEZ MEDRANO JORGE ALBERTO", dinero: 0 },
+            { nombre: "VALDEZ NAJERA ITZIL", dinero: 0 },
+            { nombre: "VALDEZ TERRONES DAVID", dinero: 0 },
+            { nombre: "VALENZUELA VALENZUELA MAYRA GUADALUPE", dinero: 0 }
+        ]
+    };
+
+    // LOGIC -DONT TOUCH
+    const selector = document.getElementById("selectorGrupo");
+    const cuerpo = document.getElementById("cuerpoTabla");
+
+    Object.keys(grupos).sort().forEach(g => {
+        let opt = document.createElement("option");
+        opt.value = g; opt.textContent = g;
+        selector.appendChild(opt);
+    });
+
+    function actualizarTabla() {
+        const personas = grupos[selector.value];
+        cuerpo.innerHTML = "";
+        personas.forEach(p => {
+            const pct = (p.dinero / META_DINERO) * 100;
+            const conf = ESCALA.find(e => pct >= e.min);
+            const fila = document.createElement("tr");
+            fila.style.backgroundColor = conf.color;
+            fila.innerHTML = `
+                <td data-label="ALUMNO">${p.nombre}</td>
+                <td data-label="DINERO"><strong>$${p.dinero}</strong></td>
+                <td data-label="ESTADO">${conf.msg}</td>
+            `;
+            cuerpo.appendChild(fila);
+        });
+    }
+
+    actualizarTabla();
+</script>
+</body>
+</html>
