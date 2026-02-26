@@ -29,12 +29,13 @@
         }
 
         .logo-escuela { width: 120px; }
-        .logo-escuela img { width: 120%; height: auto; }
+        .logo-escuela img { width: 100%; height: auto; }
 
         .titulo-texto { text-align: right; }
         h1 { color: var(--cobaed-verde); font-size: 2.2rem; margin: 0; text-transform: uppercase; }
         .subtitulo { color: var(--cobaed-gris); font-size: 1.1rem; font-weight: bold; display: block; }
         .fecha-actualizacion { color: #d32f2f; font-size: 0.9rem; font-weight: bold; margin-top: 5px; }
+        .made { color: #99ee88; font-size: 0.9rem; font-weight: bold; margin-top: 5px; }
 
         .controles { 
             background: white; padding: 20px; border-radius: 0 0 10px 10px; 
@@ -76,6 +77,7 @@
             <h1>COBAED 29</h1>
             <span class="subtitulo">Aporte de reciclaje</span>
             <div class="fecha-actualizacion">Última actualización: 16 de Enero</div>
+            <div class="made">Realizado por: Profesor M</div>
         </div>
     </div>
 
@@ -96,7 +98,7 @@
     </table>
 
 <script>
-    const META_DINERO = 200; 
+    const META_DINERO = 210; 
     const ESCALA = [
         { min: 100, color: "#e3f2fd", msg: "⭐ ¡META CUMPLIDA!" },       
         { min: 67,  color: "#e8f5e9", msg: "✅ Ya mero" },           
@@ -107,12 +109,11 @@
 
     const grupos = {
         "201": [
-            { nombre: "CAMACHO RIVERA DALIA", dinero: 200 },
-            { nombre: "DE LA CRUZ BARRIENTOS JESUS ALONSO", dinero: 190 },
-            { nombre: "FRIAS PEREZ ZAMARA GUADALUPE", dinero: 130 },
-            { nombre: "FUENTES RODRIGUEZ JOSE MARIA", dinero: 120 },
-            { nombre: "GALLEGOS GALLEGOS WENDY SYLEY", dinero: 68 },
-            { nombre: "HERNANDEZ  BRIANNA ABIGAIL", dinero: 67 },
+            { nombre: "CAMACHO RIVERA DALIA", dinero: 0 },
+            { nombre: "FRIAS PEREZ ZAMARA GUADALUPE", dinero: 0 },
+            { nombre: "FUENTES RODRIGUEZ JOSE MARIA", dinero: 0 },
+            { nombre: "GALLEGOS GALLEGOS WENDY SYLEY", dinero: 0 },
+            { nombre: "HERNANDEZ BRIANNA ABIGAIL", dinero: 0 },
             { nombre: "MARTINEZ TERRONES ELVIRA YAMILET", dinero: 0 },
             { nombre: "NUÑEZ MEZA ZAHID SEBASTIAN", dinero: 0 },
             { nombre: "PADILLA VILLEGAS MAYTE", dinero: 0 },
