@@ -36,7 +36,7 @@
         .subtitulo { color: var(--cobaed-gris); font-size: 1.1rem; font-weight: bold; display: block; }
         .fecha-actualizacion { color: #d32f2f; font-size: 0.9rem; font-weight: bold; margin-top: 5px; }
         .made { color: #99ee88; font-size: 0.9rem; font-weight: bold; margin-top: 5px; }
-
+        .aclaracion { color: #4444ff; font-size: 0.9rem; font-weight: bold; margin-top: 5px; }
         .controles { 
             background: white; padding: 20px; border-radius: 0 0 10px 10px; 
             box-shadow: 0 4px 10px var(--sombra); margin-bottom: 25px;
@@ -76,8 +76,9 @@
         <div class="titulo-texto">
             <h1>COBAED 29</h1>
             <span class="subtitulo">Aporte de reciclaje</span>
-            <div class="fecha-actualizacion">Última actualización: 24 de Marzo</div>
+            <div class="fecha-actualizacion">Última actualización: 13 de Abril</div>
             <div class="made">Realizado por: Profesor M</div>
+            
         </div>
     </div>
 
@@ -96,6 +97,8 @@
         </thead>
         <tbody id="cuerpoTabla"></tbody>
     </table>
+
+    <div class="aclaracion">Cualquier aclaración indicarla en dirección</div>
 
 <script>
     const META_DINERO = 210; 
@@ -196,8 +199,7 @@
             { nombre: "RIVERA ALDAY JONATHAN AUSENCIO", dinero: 0 },
             { nombre: "RIVERA MARTINEZ KIMBERLY GUADALUPE", dinero: 0 },
             { nombre: "RUVALCABA NAVARRETE GIOVANNA IVONNE", dinero: 0 },
-            { nombre: "VALENZUELA REYES PEDRO JAVIER", dinero: 0 },
-            
+            { nombre: "VALENZUELA REYES PEDRO JAVIER", dinero: 0 }
         ],
         "205": [
             { nombre: "ALVARADO ROJAS ANGEL ISAIAS", dinero: 52 },
@@ -250,29 +252,30 @@
         ],
         "402": [
             { nombre: "ALVAREZ VALENZUELA AYLIN VALERIA", dinero: 0 },
-            { nombre: "ARAMBULA BRISEÑO ANGEL MANUEL", dinero: 2 },
-            { nombre: "BENITEZ GALARZA ANGEL DAVID", dinero: 0 },
-            { nombre: "CABALLERO RODRIGUEZ KARLA LIBERTAD", dinero: 7 },
-            { nombre: "CALDERA DE SANTIAGO CAROLINA", dinero: 3.50 },
+            { nombre: "ARAMBULA BRISEÑO ANGEL MANUEL", dinero: 70 }, // 2 + 68
+            { nombre: "BENITEZ GALARZA ANGEL DAVID", dinero: 70 }, // 0 + 70
+            { nombre: "CABALLERO RODRIGUEZ KARLA LIBERTAD", dinero: 57 }, // 7 + 50
+            { nombre: "CALDERA DE SANTIAGO CAROLINA", dinero: 70.50 }, // 3.50 + 67
             { nombre: "CAMPOS UNZUETA ALDO RAMON", dinero: 0 },
-            { nombre: "FAVELA MARROQUIN IDALY MARLENE", dinero: 0 },
-            { nombre: "FRANCO MIJARES PAULA", dinero: 12 },
+            { nombre: "FAVELA MARROQUIN IDALY MARLENE", dinero: 70 }, // 0 + 70
+            { nombre: "FRANCO MIJARES PAULA", dinero: 102 }, // 12 + 90
             { nombre: "GARCIA FRANCO VALERIA", dinero: 130 },
             { nombre: "GALLEGOS RUIZ GERARDO YAHIR", dinero: 0 },
             { nombre: "HERNANDEZ SOTO BRISSA", dinero: 0 },
-            { nombre: "ORTIZ ALAMOS JOHAN JAVIER", dinero: 0 },
-            { nombre: "ORTIZ JUAREZ ANA ELIDIA", dinero: 0 },
-            { nombre: "PARRA BARRAZA ARMANDO", dinero: 39 },
-            { nombre: "QUINTANA RODRIGUEZ EDEN", dinero: 28 },
-            { nombre: "REYES HERRERA JULIO CESAR", dinero: 0 },
-            { nombre: "RIOPEDRE MARQUEZ GEORGIA ROMINA", dinero: 16 },
+            { nombre: "ORTIZ ALAMOS JOHAN JAVIER", dinero: 100 }, // 0 + 100
+            { nombre: "ORTIZ JUAREZ ANA ELIDIA", dinero: 70 }, // 0 + 70
+            { nombre: "PARRA BARRAZA ARMANDO", dinero: 70 }, // 39 + 31
+            { nombre: "QUINTANA RODRIGUEZ EDEN", dinero: 78 }, // 28 + 50
+            { nombre: "REYES HERRERA JULIO CESAR", dinero: 60 }, // 0 + 10 + 50
+            { nombre: "RIOPEDRE MARQUEZ GEORGIA ROMINA", dinero: 70 }, // 16 + 54
             { nombre: "RIVERA HERRERA MARTIN GUADALUPE", dinero: 17 },
             { nombre: "ROJAS MARQUEZ WALTER ALEXIS", dinero: 0 },
             { nombre: "RUIZ GURROLA DANIEL", dinero: 0 },
             { nombre: "SANTOS AVITIA JOSE GAEL", dinero: 3.50 },
             { nombre: "SIDA RUVALCABA JARED JOSUE", dinero: 0 },
             { nombre: "SOTO DOMINGUEZ GUILLERMO", dinero: 10 },
-            { nombre: "VALENZUELA VASQUEZ JESUS ALEJANDRO", dinero: 26 }
+            { nombre: "VALENZUELA VASQUEZ JESUS ALEJANDRO", dinero: 26 },
+            { nombre: "VALERIA ÁLVAREZ", dinero: 100 } // Agregado de Excel
         ],
         "403": [
             { nombre: "ACOSTA HERNANDEZ DIEGO JEHOVANY", dinero: 0 },
@@ -287,14 +290,13 @@
             { nombre: "GALINDO FRANCO JUAN MANUEL", dinero: 0 },
             { nombre: "GALINDO NORIEGA MICAELA GUADALUPE", dinero: 0 },
             { nombre: "GALVAN RETANA MISAEL", dinero: 0 },
-            
             { nombre: "GARAY VALENZUELA KIMBERLY GUADALUPE", dinero: 0 },
             { nombre: "GARCIA LUNA MANUEL ERNESTO", dinero: 0 },
             { nombre: "GONZALEZ DIAZ KEIRA ABRIL", dinero: 0 },
             { nombre: "GURROLA ANTUNA CESAR ISAAC", dinero: 0 },
             { nombre: "GURROLA ANTUNA JULIO ISMAEL", dinero: 0 },
             { nombre: "HERRERA REYES EDWIN", dinero: 0 },
-            { nombre: "MORALES CANAAN JAVIER", dinero: 0 },
+            { nombre: "MORALES CANAAN JAVIER", dinero: 200 }, // 0 + 200
             { nombre: "PIÑA ARCINIEGA ALLISSON RENATA", dinero: 0 },
             { nombre: "REYES ESTRADA GENESIS YOMARA", dinero: 0 },
             { nombre: "RIVAS ALVARADO ULISES ALONSO", dinero: 0 },
@@ -308,7 +310,7 @@
         "404": [
             { nombre: "ALAMILLO INSURRIAGA JUAN AGUSTIN", dinero: 0 },
             { nombre: "ALDABA QUEZADA SERGIO ALEJANDRO", dinero: 0 },
-            { nombre: "ARELLANO SANTILLAN SARA", dinero: 0 },
+            { nombre: "ARELLANO SANTILLAN SARA", dinero: 70 }, // 0 + 70
             { nombre: "AYALA ARREOLA JOSUE MANUEL", dinero: 0 },
             { nombre: "CHAVEZ QUINTERO BELEN GUADALUPE", dinero: 0 },
             { nombre: "DIAZ ACOSTA ANGELA BENNET", dinero: 0 },
@@ -380,13 +382,13 @@
             { nombre: "LUNA TORRES ANDREA SUGEY", dinero: 0 },
             { nombre: "MARTINEZ RIVERA ELIZABETH", dinero: 0 },
             { nombre: "MORALES VALENCIANA ALYSON GUADALUPE", dinero: 0 },
-            { nombre: "MORALES VARGAS JIMENA", dinero: 0 },
+            { nombre: "MORALES VARGAS JIMENA", dinero: 70 }, // 0 + 70
             { nombre: "PARRA SEGOVIA KASSANDRA", dinero: 0 },
             { nombre: "PEREZ ROSAS MARIO ALBERTO", dinero: 0 },
             { nombre: "PIZAÑA FRANCO KEVIN EDUARDO", dinero: 0 },
             { nombre: "PIZARRO ACOSTA NEIDA GUADALUPE", dinero: 0 },
             { nombre: "RENTERIA PEREZ ESTRELLA GUADALUPE", dinero: 0 },
-            { nombre: "REYES RODRIGUEZ KETZUVY YARELY", dinero: 0 },
+            { nombre: "REYES RODRIGUEZ KETZUVY YARELY", dinero: 70 }, // 0 + 70
             { nombre: "REYES SANCHEZ ANAHI", dinero: 0 },
             { nombre: "RODRIGUEZ GALLEGOS INGRID DENISE", dinero: 0 },
             { nombre: "RODRIGUEZ GURROLA FERNANDA SARAHI", dinero: 0 },
@@ -443,9 +445,9 @@
             { nombre: "REYES ESCOBEDO EMILY JOSELINE", dinero: 0 },
             { nombre: "REYES ORTIZ ANGEL ARMANDO", dinero: 0 },
             { nombre: "REYES ORTIZ LIZETH GUADALUPE", dinero: 57 },
-            { nombre: "RODRIGUEZ GURROLA GENESIS ELIZABETH", dinero: 68 },
+            { nombre: "RODRIGUEZ GURROLA GENESIS ELIZABETH", dinero: 70 }, // 68 + 2
             { nombre: "RUIZ REYES ARANZA GUADALUPE", dinero: 0 },
-            { nombre: "SOTO JUAREZ DANNA EMILIA", dinero: 16 },
+            { nombre: "SOTO JUAREZ DANNA EMILIA", dinero: 70 }, // 16 + 54
             { nombre: "UNZUETA CELIS BRITHANY MAIRYN", dinero: 0 },
             { nombre: "VALENZUELA BENITEZ JOSE MANUEL", dinero: 0 },
             { nombre: "VALENZUELA PIZAÑA DAIRA ELIZABETH", dinero: 0 },
@@ -483,7 +485,7 @@
             { nombre: "DIAZ VALENZUELA SEBASTIAN ALEJANDRO", dinero: 20 },
             { nombre: "GARCIA GALINDO ALINA JOCELYN", dinero: 78 },
             { nombre: "GARCIA REYES VANESA GUADALUPE", dinero: 26 },
-            { nombre: "GARCIA SANCHEZ VALERIA", dinero: 143 },
+            { nombre: "GARCIA SANCHEZ VALERIA", dinero: 213 }, // 143 + 70 (VALERIA de imagen)
             { nombre: "GONZALEZ CASTRO IVAN JAVIER", dinero: 0 },
             { nombre: "GURROLA PIZAÑA DANIELA NAHID", dinero: 0 },
             { nombre: "GURROLA REYES MAYUMI GUADALUPE", dinero: 42 },
@@ -499,9 +501,10 @@
             { nombre: "RODRIGUEZ ALDAY CITLALY GUADALUPE", dinero: 0 },
             { nombre: "RODRIGUEZ GALLEGOS JULISA JACQUELINE", dinero: 0 },
             { nombre: "SOTO FIERRO JESUS DAVID", dinero: 0 },
-            { nombre: "SOTO MORALES MARIA VALERIA", dinero: 0 },
+            { nombre: "SOTO MORALES MARIA VALERIA", dinero: 70 }, // 0 + 70 (VALERIA de imagen 604)
             { nombre: "VARELAS RIVAS ESTRELLA JOELLY", dinero: 52 },
-            { nombre: "VARGAS AGUILAR DAYREN YAMILETH", dinero: 65 }
+            { nombre: "VARGAS AGUILAR DAYREN YAMILETH", dinero: 65 },
+            { nombre: "ESTEFANÍA", dinero: 70 } // Agregado de Excel 604
         ],
         "605": [
             { nombre: "AYALA ARREOLA XIMENA MONSERRATH", dinero: 0 },
@@ -531,44 +534,44 @@
             { nombre: "VALENZUELA VALENZUELA MAYRA GUADALUPE", dinero: 0 }
         ],
         "PERSONAL": [
-    { "nombre": "ALVAREZ SIFUENTES MARIA GUADALUPE", "dinero": 143 },
-    { "nombre": "ARCINIEGA MENDOZA FIDEL", "dinero": 0 },
-    { "nombre": "ARELLANO MAYRA KARINA", "dinero": 0 },
-    { "nombre": "ARELLANO RUEDA ENRIQUETA", "dinero": 0 },
-    { "nombre": "CHAVEZ GUTIERREZ JOSE DAVID", "dinero": 0 },
-    { "nombre": "CORTEZ MARTEL CANDIDO", "dinero": 0 },
-    { "nombre": "DIAZ RUIZ LUIS CARLOS", "dinero": 0 },
-    { "nombre": "EZQUEDA RODRIGUEZ OSCAR ADRIAN", "dinero": 0 },
-    { "nombre": "FRANCO REYES CRISANTA", "dinero": 0 },
-    { "nombre": "GALVAN REYES LINA", "dinero": 0 },
-    { "nombre": "GARCIA RUEDA NESTOR SAUL", "dinero": 0 },
-    { "nombre": "GUAJARDO RIVAS JESUS SALVADOR", "dinero": 0 },
-    { "nombre": "JUAREZ GURROLA SILVIA", "dinero": 0 },
-    { "nombre": "MARQUEZ RUIZ ADRIANA BERENICE", "dinero": 70 },
-    { "nombre": "MARTINEZ GRACIANO MIRIAM EUNICE", "dinero": 0 },
-    { "nombre": "MIJARES MUÑOZ KARINA", "dinero": 0 },
-    { "nombre": "MORENO NUÑEZ MARIA DE LOS ANGELES", "dinero": 0 },
-    { "nombre": "MUÑOZ VALENZUELA JOSE ANGEL", "dinero": 0 },
-    { "nombre": "MUÑOZ VELAZQUEZ MA. LUISA", "dinero": 0 },
-    { "nombre": "ORTIZ IRIGOYEN JOSE LUIS", "dinero": 41 },
-    { "nombre": "PADILLA LUNA EDUARDO", "dinero": 0 },
-    { "nombre": "PEREZ SANTILLAN JACIEL IRAIM", "dinero": 0 },
-    { "nombre": "PONCE RETANA CANDY ESMERALDA", "dinero": 0 },
-    { "nombre": "PONCE RETANA GRECIA ISAMAR", "dinero": 70 },
-    { "nombre": "QUEZADA LOPEZ MANUEL", "dinero": 0 },
-    { "nombre": "QUIÑONES VALDEZ MARIO ALBERTO", "dinero": 0 },
-    { "nombre": "RAMIREZ GARCIA MARTIN", "dinero": 210 },
-    { "nombre": "ROCHEL RODRIGUEZ MANUEL RAFAEL", "dinero": 0 },
-    { "nombre": "ROJAS PORTILLO MARIA DOLORES", "dinero": 70 },
-    { "nombre": "ROJO CONTRERAS WENDY SOFIA", "dinero": 70 },
-    { "nombre": "ROJO ZAMARRIPA JOSE LUIS", "dinero": 70 },
-    { "nombre": "ROMERO RIVAS LORENA", "dinero": 70 },
-    { "nombre": "SANDOVAL GUTIERREZ KARINA", "dinero": 28 },
-    { "nombre": "SIQUEIROS QUIÑONES DIANA ALEJANDRA", "dinero": 0 },
-    { "nombre": "SOTO ZAMORA SUSANA ZAMORA", "dinero": 0 },
-    { "nombre": "VALDEZ HUERTA MARIA PATRICIA", "dinero": 0 },
-    { "nombre": "VALLEJO PEREZ CARLOS DONACIANO", "dinero": 0 }
-]
+            { "nombre": "ALVAREZ SIFUENTES MARIA GUADALUPE", "dinero": 143 },
+            { "nombre": "ARCINIEGA MENDOZA FIDEL", "dinero": 0 },
+            { "nombre": "ARELLANO MAYRA KARINA", "dinero": 0 },
+            { "nombre": "ARELLANO RUEDA ENRIQUETA", "dinero": 0 },
+            { "nombre": "CHAVEZ GUTIERREZ JOSE DAVID", "dinero": 0 },
+            { "nombre": "CORTEZ MARTEL CANDIDO", "dinero": 0 },
+            { "nombre": "DIAZ RUIZ LUIS CARLOS", "dinero": 0 },
+            { "nombre": "EZQUEDA RODRIGUEZ OSCAR ADRIAN", "dinero": 0 },
+            { "nombre": "FRANCO REYES CRISANTA", "dinero": 0 },
+            { "nombre": "GALVAN REYES LINA", "dinero": 0 },
+            { "nombre": "GARCIA RUEDA NESTOR SAUL", "dinero": 0 },
+            { "nombre": "GUAJARDO RIVAS JESUS SALVADOR", "dinero": 0 },
+            { "nombre": "JUAREZ GURROLA SILVIA", "dinero": 0 },
+            { "nombre": "MARQUEZ RUIZ ADRIANA BERENICE", "dinero": 70 },
+            { "nombre": "MARTINEZ GRACIANO MIRIAM EUNICE", "dinero": 0 },
+            { "nombre": "MIJARES MUÑOZ KARINA", "dinero": 0 },
+            { "nombre": "MORENO NUÑEZ MARIA DE LOS ANGELES", "dinero": 0 },
+            { "nombre": "MUÑOZ VALENZUELA JOSE ANGEL", "dinero": 0 },
+            { "nombre": "MUÑOZ VELAZQUEZ MA. LUISA", "dinero": 0 },
+            { "nombre": "ORTIZ IRIGOYEN JOSE LUIS", "dinero": 41 },
+            { "nombre": "PADILLA LUNA EDUARDO", "dinero": 0 },
+            { "nombre": "PEREZ SANTILLAN JACIEL IRAIM", "dinero": 0 },
+            { "nombre": "PONCE RETANA CANDY ESMERALDA", "dinero": 0 },
+            { "nombre": "PONCE RETANA GRECIA ISAMAR", "dinero": 70 },
+            { "nombre": "QUEZADA LOPEZ MANUEL", "dinero": 0 },
+            { "nombre": "QUIÑONES VALDEZ MARIO ALBERTO", "dinero": 70 },
+            { "nombre": "RAMIREZ GARCIA MARTIN", "dinero": 210 },
+            { "nombre": "ROCHEL RODRIGUEZ MANUEL RAFAEL", "dinero": 0 },
+            { "nombre": "ROJAS PORTILLO MARIA DOLORES", "dinero": 70 },
+            { "nombre": "ROJO CONTRERAS WENDY SOFIA", "dinero": 70 },
+            { "nombre": "ROJO ZAMARRIPA JOSE LUIS", "dinero": 70 },
+            { "nombre": "ROMERO RIVAS LORENA", "dinero": 70 },
+            { "nombre": "SANDOVAL GUTIERREZ KARINA", "dinero": 28 },
+            { "nombre": "SIQUEIROS QUIÑONES DIANA ALEJANDRA", "dinero": 0 },
+            { "nombre": "SOTO ZAMORA SUSANA ZAMORA", "dinero": 70 },
+            { "nombre": "VALDEZ HUERTA MARIA PATRICIA", "dinero": 0 },
+            { "nombre": "VALLEJO PEREZ CARLOS DONACIANO", "dinero": 0 }
+        ]
     };
 
     // LOGIC -DONT TOUCH
